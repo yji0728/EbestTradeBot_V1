@@ -49,12 +49,12 @@ namespace EbestTradeBot_V1
 
         private void SetLightMode()
         {
-            ThemeManager.Current.ChangeTheme(this, "Light.Olive");
+            ThemeManager.Current.ChangeTheme(this, "Light.Red");
         }
 
         private void SetDarkMode()
         {
-            ThemeManager.Current.ChangeTheme(this, "Dark.Olive");
+            ThemeManager.Current.ChangeTheme(this, "Dark.Red");
         }
     }
 }
