@@ -60,13 +60,8 @@ namespace EbestTradeBot.Core.Services
         }
         #region public Methods
 
-        public void Login()
+        public void Login(string id, string pw, string certPw, bool isTestTrade)
         {
-            string id = AppSettings.Instance.Id;
-            string pw = AppSettings.Instance.Password;
-            string certPw = AppSettings.Instance.CertificationPassword;
-            bool isTestTrade = AppSettings.Instance.IsTestTrade;
-
             if (!_xaSession.IsConnected())
             {
                 Connect(isTestTrade);
@@ -97,7 +92,7 @@ namespace EbestTradeBot.Core.Services
         private void Request_t1857()
         {
             if (!_xaSession.IsConnected())
-                Login();
+                Login(AppSettings.Instance.Id, AppSettings.Instance.Password, AppSettings.Instance.CertificationPassword, AppSettings.Instance.IsTestTrade);
 
             if (_isLogin)
             {

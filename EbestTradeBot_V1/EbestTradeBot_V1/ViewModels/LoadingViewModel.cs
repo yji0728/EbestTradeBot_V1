@@ -59,9 +59,6 @@ namespace EbestTradeBot_V1.ViewModels
                 Status1 = "XingApi 서버와 연결 중입니다.";
                 _xingApi = Manager.Instance.XingApi;
                 _xingApi.Connect(AppSettings.Instance.IsTestTrade);
-
-                Status1 = "XingApi 로그인 중입니다.";
-                _xingApi.Login();
             }
         }
 

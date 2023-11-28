@@ -185,7 +185,7 @@ namespace EbestTradeBot_V1.ViewModels
 
         private void ExecuteLoginXingApiCommand()
         {
-            _xingApiService.Login();
+            _xingApiService.Login(Id, Password, CertificationPassword, IsTestTrade);
         }
 
         private void ExecuteSaveCommand()
