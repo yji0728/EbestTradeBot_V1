@@ -503,12 +503,16 @@ namespace EbestTradeBot.Core.Services
                     if (!IsSellRun)
                     {
                         IsSellRun = true;
+                        
+                        List<Stock> stocks = new();
+                        stocks.AddRange(Manager.Instance.MyAccount);
 
+                        // 장끝나는 시간에 전부매도
                         if (!TimeHelper.IsMarketOpen())
                         {
                             if (!IsMarketEnd)
                             {
-                                foreach (var stock in Manager.Instance.MyAccount)
+                                foreach (var stock in stocks)
                                 {
                                     SellStock(stock);
                                 }
@@ -520,9 +524,7 @@ namespace EbestTradeBot.Core.Services
                             continue;
                         }
 
-                        List<Stock> stocks = new();
-                        stocks.AddRange(Manager.Instance.MyAccount);
-
+                        // 계산후 매도
                         foreach (var stock in stocks)
                         {
                             var stockPrice = GetCurrentQuote(stock.Shcode);
