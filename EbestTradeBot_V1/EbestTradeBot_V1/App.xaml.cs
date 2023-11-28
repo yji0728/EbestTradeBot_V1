@@ -22,8 +22,7 @@ namespace EbestTradeBot_V1
     {
         protected override Window CreateShell()
         {
-            SetTheme();
-
+            SetTheme("Red");
             return Container.Resolve<LoadingView>();
         }
 
@@ -34,27 +33,27 @@ namespace EbestTradeBot_V1
             containerRegistry.Register<LoadingViewModel>();
         }
 
-        private void SetTheme()
+        public void SetTheme(string color)
         {
             EbestTradeBot.Core.Models.Theme theme = AppSettings.Instance.Theme;
             if (theme == EbestTradeBot.Core.Models.Theme.Dark)
             {
-                SetDarkMode();
+                SetDarkMode(color);
             }
             else
             {
-                SetLightMode();
+                SetLightMode(color);
             }
         }
 
-        private void SetLightMode()
+        private void SetLightMode(string color)
         {
-            ThemeManager.Current.ChangeTheme(this, "Light.Red");
+            ThemeManager.Current.ChangeTheme(this, $"Light.{color}");
         }
 
-        private void SetDarkMode()
+        private void SetDarkMode(string color)
         {
-            ThemeManager.Current.ChangeTheme(this, "Dark.Red");
+            ThemeManager.Current.ChangeTheme(this, $"Dark.{color}");
         }
     }
 }
