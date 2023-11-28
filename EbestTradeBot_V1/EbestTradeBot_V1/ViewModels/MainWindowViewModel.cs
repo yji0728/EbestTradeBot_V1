@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 using EbestTradeBot.Core;
 using EbestTradeBot.Core.Services;
@@ -24,6 +25,8 @@ namespace EbestTradeBot_V1.ViewModels
 
         private async void OnStarted()
         {
+            Board = "";
+
             CancellationTokenSource = new CancellationTokenSource();
             
             // OpenApi 토큰 발급
@@ -46,8 +49,7 @@ namespace EbestTradeBot_V1.ViewModels
             {
                 // 매수가 지정
                 _openApiService.SetBuyPrice(Manager.Instance.MyAccount[i]);
-                AddBoard($"[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}] " +
-                         $"[잔고조회] " +
+                AddBoard($"[잔고조회] " +
                          $"[종목코드:{Manager.Instance.MyAccount[i].Shcode}] " + 
                          $"[종목명:{Manager.Instance.MyAccount[i].Hname}] " + 
                          $"[보유량:{Manager.Instance.MyAccount[i].보유량}] " + 
@@ -115,7 +117,6 @@ namespace EbestTradeBot_V1.ViewModels
 
         private void SetRun(bool isRun, bool isFirst)
         {
-            Board = "";
             IsRun = isRun;
 
             if (IsRun)          // 종료요청
@@ -135,10 +136,15 @@ namespace EbestTradeBot_V1.ViewModels
 
         private void AddBoard(string board)
         {
-            Dispatcher.CurrentDispatcher.Invoke(() =>
+            if (IsRun)
             {
-                Board += $"{board}\r\n";
-            });
+                Dispatcher.CurrentDispatcher.Invoke(() =>
+                {
+                    if (Board.Contains(board) && Board.Contains("[검색]")) return;
+
+                    Board += $"[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}] {board}\r\n";
+                });
+            }
         }
     }
 }

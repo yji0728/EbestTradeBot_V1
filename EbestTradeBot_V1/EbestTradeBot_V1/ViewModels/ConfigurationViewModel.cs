@@ -105,13 +105,19 @@ namespace EbestTradeBot_V1.ViewModels
             set => SetProperty(ref _dayCount, value);
         }
 
-
         private int _replySecond;
 
         public int ReplySecond
         {
             get => _replySecond;
             set => SetProperty(ref _replySecond, value);
+        }
+
+        private int _cooldownDay;
+        public int CooldownDay
+        {
+            get => _cooldownDay;
+            set => SetProperty(ref _cooldownDay, value);
         }
         #endregion
 
@@ -130,6 +136,7 @@ namespace EbestTradeBot_V1.ViewModels
             IsTestTrade = appSettings.IsTestTrade;
             DayCount = appSettings.DayCount;
             ReplySecond = appSettings.ReplySecond;
+            CooldownDay = appSettings.CooldownDay;
         }
         private ConfigurationViewModel()
         {
@@ -196,6 +203,7 @@ namespace EbestTradeBot_V1.ViewModels
             appSettings.IsTestTrade = IsTestTrade;
             appSettings.DayCount = DayCount;
             appSettings.ReplySecond = ReplySecond;
+            appSettings.CooldownDay = CooldownDay;
 
             AppSettings.Instance.Set(appSettings);
         }

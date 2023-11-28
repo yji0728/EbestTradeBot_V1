@@ -69,20 +69,31 @@ namespace EbestTradeBot.Core.Services
                 for (int i = 0; i < stocks.Count; i++)
                 {
                     // 매수가 지정
+                    if (Manager.Instance.BanStock.Any(x => x.Shcode.Equals(stocks[i].Shcode))) continue;
+
                     SetBuyPrice(stocks[i]);
                     await Task.Delay(AppSettings.Instance.ReplySecond * 1000);
                     if (stocks[i].매수가 == -1 || stocks[i].손절가 == -1 || stocks[i].익절가 == -1) continue;
                     int stockPrice = GetCurrentQuote(stocks[i].Shcode);
+                    BoardFunc($"[검색] " +
+                              $"[종목코드:{stocks[i].Shcode}] " +
+                              $"[종목명:{stocks[i].Hname}] " +
+                              $"[매수가:{stocks[i].매수가}] " +
+                              $"[손절가:{stocks[i].손절가}] " +
+                              $"[익절가:{stocks[i].익절가}]");
                     if (stocks[i].매수가 >= stockPrice && !Manager.Instance.MyAccount.Any(x => x.Shcode.Equals(stocks[i].Shcode)))
                     {
                         BuyStock(stocks[i], stockPrice);
+
+                        TradedStock stock = new TradedStock { Shcode = stocks[i].Shcode, TradeDate = DateTime.Now };
+                        Manager.Instance.BanStock.Add(stock);
+                        Helpers.CsvHelper.WriteCsv("TradedStock.csv", stock);
                     }
                 }
             }
             catch (Exception ex)
             {
-                BoardFunc($"[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}] " +
-                          $"[ERROR] " +
+                BoardFunc($"[ERROR] " +
                           $"[{ex.Message}] " +
                           $"[{ex.StackTrace}]");
             }
@@ -171,8 +182,7 @@ namespace EbestTradeBot.Core.Services
 
                         if (BoardFunc != null)
                         {
-                            BoardFunc($"[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}] " +
-                                      $"[구매] " +
+                            BoardFunc($"[구매] " +
                                       $"[종목코드:{stock.Shcode}] " +
                                       $"[종목명:{stock.Hname}] " + 
                                       $"[매수가:{stock.매수가}] " + 
@@ -242,8 +252,7 @@ namespace EbestTradeBot.Core.Services
                         Manager.Instance.MyAccount.Remove(stock);
                         if (BoardFunc != null)
                         {
-                            BoardFunc($"[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}] " +
-                                      $"[판매] " + 
+                            BoardFunc($"[판매] " + 
                                       $"[종목코드:{stock.Shcode}] " + 
                                       $"[종목명:{stock.Hname}]");
                         }
@@ -504,8 +513,7 @@ namespace EbestTradeBot.Core.Services
                                     SellStock(stock);
                                 }
 
-                                BoardFunc($"[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}] " +
-                                          $"[장이 마감되어 판매 모듈을 종료합니다]");
+                                BoardFunc($"[장이 마감되어 판매 모듈을 종료합니다]");
                             }
 
                             IsMarketEnd = true;
@@ -528,16 +536,14 @@ namespace EbestTradeBot.Core.Services
 
                         if (IsMarketEnd)
                         {
-                            BoardFunc($"[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}] " +
-                                      $"[장이 시작되어 판매 모듈을 시작합니다]");
+                            BoardFunc($"[장이 시작되어 판매 모듈을 시작합니다]");
                             IsMarketEnd = false;
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    BoardFunc($"[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}] " +
-                              $"[ERROR] " +
+                    BoardFunc($"[ERROR] " +
                               $"[{e.Message}] " +
                               $"[{e.StackTrace}]");
                 }

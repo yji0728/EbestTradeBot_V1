@@ -178,8 +178,7 @@ namespace EbestTradeBot.Core.Services
                     {
                         if (!IsMarketEnd)
                         {
-                            BoardFunc($"[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}] " +
-                                      $"[장이 마감되어 구매 모듈을 종료합니다]");
+                            BoardFunc($"[장이 마감되어 구매 모듈을 종료합니다]");
                         }
 
                         IsMarketEnd = true;
@@ -193,15 +192,18 @@ namespace EbestTradeBot.Core.Services
 
                     if (IsMarketEnd)
                     {
-                        BoardFunc($"[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}] " +
-                                  $"[장이 시작되어 구매 모듈을 시작합니다]");
+                        BoardFunc($"[장이 시작되어 구매 모듈을 시작합니다]");
                         IsMarketEnd = false;
+
+                        DateTime eDate = DateTime.Now;
+                        DateTime sDate = DateTime.Now.Date.AddDays(_appSettings.CooldownDay * -1);
+                        Manager.Instance.BanStock = Helpers.CsvHelper.ReadTradedStockCsv($"TradedStock.csv").Where(x => x.TradeDate >= sDate && x.TradeDate <= eDate)
+                            .ToList();
                     }
                 }
                 catch (Exception e)
                 {
-                    BoardFunc($"[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}] " +
-                              $"[ERROR] " +
+                    BoardFunc($"[ERROR] " +
                               $"[{e.Message}] " +
                               $"[{e.StackTrace}]");
 

@@ -10,26 +10,26 @@
         xmlns:vm="clr-namespace:EbestTradeBot_V1.ViewModels"
         d:DataContext="{d:DesignInstance Type=vm:ConfigurationViewModel}"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="옵션" Height="430" Width="620" ResizeMode="NoResize">
+        Title="옵션" Height="430" Width="640" ResizeMode="NoResize">
     <DockPanel Margin="2.5">
         <GroupBox DockPanel.Dock="Top" Margin="2.5" Header="Xing API">
             <StackPanel Orientation="Vertical" Margin="2.5">
                 <StackPanel Orientation="Horizontal" Margin="2.5" HorizontalAlignment="Right">
                     <TextBlock  Text="ID :" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2.5"/>
-                    <TextBox Width="135" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2.5"
+                    <TextBox Width="145" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2.5"
                              Text="{Binding Id}"/>
                     <TextBlock Text="PW :" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2.5"/>
-                    <PasswordBox x:Name="Password" Width="135" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2.5" 
+                    <PasswordBox x:Name="Password" Width="145" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2.5" 
                                  PasswordChanged="Password_OnPasswordChanged"/>
                     <TextBlock Text="공인PW :" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2.5"/>
-                    <PasswordBox x:Name="CertificationPassword" Width="135" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2.5"
+                    <PasswordBox x:Name="CertificationPassword" Width="145" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2.5"
                                  PasswordChanged="Password_OnPasswordChanged"/>
                     <Button Content="로그인" Margin="2.5" Command="{Binding LoginXingApiCommand}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="2.5">
                     <TextBlock  Text="ACF 파일 :" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2.5"/>
-                    <TextBox Width="480" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2.5"
+                    <TextBox Width="510" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2.5"
                              Text="{Binding AcfFilePath}"/>
                     <Button Content=". . ." Margin="2.5" Command="{Binding FileDialogCommand}"/>
                 </StackPanel>
@@ -39,12 +39,12 @@
             <StackPanel Orientation="Vertical" Margin="2.5">
                 <StackPanel Orientation="Horizontal" Margin="2.5" HorizontalAlignment="Right">
                     <TextBlock Text="앱키 :" Margin="2.5" VerticalAlignment="Center"/>
-                    <TextBox Margin="2.5" Width="510" VerticalAlignment="Center"
+                    <TextBox Margin="2.5" Width="540" VerticalAlignment="Center"
                              Text="{Binding AppKey}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="2.5" HorizontalAlignment="Right">
                     <TextBlock Text="시크릿키 :" Margin="2.5" VerticalAlignment="Center"/>
-                    <TextBox Margin="2.5" Width="510" VerticalAlignment="Center"
+                    <TextBox Margin="2.5" Width="540" VerticalAlignment="Center"
                              Text="{Binding SecretKey}"/>
                 </StackPanel>
             </StackPanel>
@@ -66,13 +66,19 @@
                     </TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="2.5" HorizontalAlignment="Right">
+                    <TextBlock Text="거래쿨타임 :" Margin="2.5" VerticalAlignment="Center"/>
+                    <TextBox Margin="2.5" Width="125" VerticalAlignment="Center">
+                        <TextBox.Text>
+                            <Binding Path="CooldownDay" StringFormat="N0"/>
+                        </TextBox.Text>
+                    </TextBox>
                     <TextBlock Text="거래금액 :" Margin="2.5" VerticalAlignment="Center"/>
                     <TextBox Margin="2.5" Width="125" VerticalAlignment="Center">
                         <TextBox.Text>
                             <Binding Path="TradePrice" StringFormat="N0"/>
                         </TextBox.Text>
                     </TextBox>
-                    <TextBlock Text="     일봉설정 :" Margin="2.5" VerticalAlignment="Center"/>
+                    <TextBlock Text="    일봉설정 :" Margin="2.5" VerticalAlignment="Center"/>
                     <TextBox Margin="2.5" Width="125" VerticalAlignment="Center">
                         <TextBox.Text>
                             <Binding Path="DayCount" StringFormat="N0"/>

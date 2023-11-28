@@ -34,6 +34,7 @@ namespace EbestTradeBot.Core
         public int DayCount { get; set; }
         public Theme Theme { get; set; }
         public int ReplySecond { get; set; }
+        public int CooldownDay { get; set; }
 
         public AppSettings()
         {
@@ -78,6 +79,7 @@ namespace EbestTradeBot.Core
             DayCount = appSettings.DayCount;
             IsTestTrade = appSettings.IsTestTrade;
             ReplySecond = appSettings.ReplySecond;
+            CooldownDay = appSettings.CooldownDay;
 
             SaveToJson(this);
         }
@@ -113,10 +115,11 @@ namespace EbestTradeBot.Core
             AccountNumber = "";
             AccountPassword = "";
             AcfFilePath = "";
-            DayCount = -1;
-            TradePrice = -1;
+            DayCount = 0;
+            TradePrice = 0;
             IsTestTrade = true;
-            ReplySecond = -1;
+            ReplySecond = 0;
+            CooldownDay = 0;
         }
 
         private void GetAppSettingForConfig(IConfiguration configuration)
@@ -168,6 +171,10 @@ namespace EbestTradeBot.Core
             int replySecond;
             if (int.TryParse(configuration["ReplySecond"], out replySecond)) ReplySecond = replySecond;
             else ReplySecond = 0;
+
+            int cooldownDay;
+            if (int.TryParse(configuration["CooldownDay"], out cooldownDay)) CooldownDay = cooldownDay;
+            else CooldownDay = 0;
         }
 
         private void SaveToJson(AppSettings appSettings)

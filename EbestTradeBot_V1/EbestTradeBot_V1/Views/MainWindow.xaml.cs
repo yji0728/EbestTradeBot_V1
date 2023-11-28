@@ -34,6 +34,11 @@ namespace EbestTradeBot_V1
 
         private void Cofiguration_Clicked(object sender, RoutedEventArgs e)
         {
+            if (_vm.IsRun)
+            {
+                MessageBox.Show("매매 진행중엔 설정 창을 열 수 없습니다", "오류");
+                return;
+            }
             ConfigurationWindow configurationWindow = new ConfigurationWindow();
             configurationWindow.ShowDialog();
         }

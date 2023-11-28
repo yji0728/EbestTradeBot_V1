@@ -47,13 +47,20 @@ namespace EbestTradeBot.Core
         #endregion
 
         #region Properties
-
         private List<Stock> _myAccount;
 
         public List<Stock> MyAccount
         {
             get => _myAccount;
             set => _myAccount = value;
+        }
+
+        private List<TradedStock> _banStock;
+
+        public List<TradedStock> BanStock
+        {
+            get => _banStock;
+            set => _banStock = value;
         }
 
         private CancellationTokenSource _cancellationTokenSource;
