@@ -74,7 +74,7 @@ namespace EbestTradeBot.Core.Services
                     SetBuyPrice(stocks[i]);
                     await Task.Delay(AppSettings.Instance.ReplySecond * 1000);
                     if (stocks[i].매수가 == -1 || stocks[i].손절가 == -1 || stocks[i].익절가 == -1) continue;
-                    int stockPrice = GetCurrentQuote(stocks[i].Shcode);
+                    int stockPrice = GetCurrentQuote(stocks[i].Shcode).Price;
                     BoardFunc($"[검색] " +
                               $"[종목코드:{stocks[i].Shcode}] " +
                               $"[종목명:{stocks[i].Hname}] " +
@@ -269,7 +269,7 @@ namespace EbestTradeBot.Core.Services
             }
         }
 
-        private int GetCurrentQuote(string shcode)
+        private (int Price, int Uplmtprice, int Dnlmtprice) GetCurrentQuote(string shcode) // 
         {
             lock (t1101Key)
             {
@@ -298,7 +298,7 @@ namespace EbestTradeBot.Core.Services
                 {
                     jObj = HttpService.PostForJson(url, postData, headers);
 
-                    return (int)jObj["t1101OutBlock"]["price"];
+                    return ((int)jObj["t1101OutBlock"]["price"], (int)jObj["t1101OutBlock"]["uplmtprice"], (int)jObj["t1101OutBlock"]["dnlmtprice"]);
                 }
                 catch (Exception e)
                 {
@@ -525,9 +525,12 @@ namespace EbestTradeBot.Core.Services
 
                         foreach (var stock in stocks)
                         {
-                            int price = GetCurrentQuote(stock.Shcode);
+                            var stockPrice = GetCurrentQuote(stock.Shcode);
+                            int price = stockPrice.Price;
+                            int up = stockPrice.Uplmtprice;
+                            int down = stockPrice.Dnlmtprice;
 
-                            if (price > stock.익절가 || price < stock.손절가)
+                            if (price > stock.익절가 || price < stock.손절가 || price == up || price == down)
                             {
                                 SellStock(stock);
                             }

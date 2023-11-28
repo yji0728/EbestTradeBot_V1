@@ -14,5 +14,7 @@ namespace EbestTradeBot.Core.Models
         public int 익절가 { get; set; }
         public int 매수가 { get; set; }
         public int 보유량 { get; set; }
+        public int 상한가 { get; set; }
+        public int 하한가 { get; set; }
     }
 }
