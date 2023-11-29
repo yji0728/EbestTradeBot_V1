@@ -73,15 +73,15 @@ namespace EbestTradeBot.Core.Services
 
                     SetBuyPrice(stocks[i]);
                     await Task.Delay(AppSettings.Instance.ReplySecond * 1000);
-                    if (stocks[i].매수가 == -1 || stocks[i].손절가 == -1 || stocks[i].익절가 == -1) continue;
+                    if (stocks[i].매수가_1차 == -1 || stocks[i].손절가 == -1 || stocks[i].익절가 == -1) continue;
                     int stockPrice = GetCurrentQuote(stocks[i].Shcode).Price;
                     BoardFunc($"[검색] " +
                               $"[종목코드:{stocks[i].Shcode}] " +
                               $"[종목명:{stocks[i].Hname}] " +
-                              $"[매수가:{stocks[i].매수가}] " +
+                              $"[매수가:{stocks[i].매수가_1차}] " +
                               $"[손절가:{stocks[i].손절가}] " +
                               $"[익절가:{stocks[i].익절가}]");
-                    if (stocks[i].매수가 >= stockPrice && !Manager.Instance.MyAccount.Any(x => x.Shcode.Equals(stocks[i].Shcode)))
+                    if (stocks[i].매수가_1차 >= stockPrice && !Manager.Instance.MyAccount.Any(x => x.Shcode.Equals(stocks[i].Shcode)))
                     {
                         BuyStock(stocks[i], stockPrice);
 
@@ -114,8 +114,14 @@ namespace EbestTradeBot.Core.Services
 
             if (t1305OutBlock1 == null) return null;
 
+            bool isFirst = true;
             foreach (var t1305 in t1305OutBlock1)
             {
+                if (isFirst)
+                {
+                    isFirst = false;
+                    continue;
+                }
                 Data_t1305 t = new Data_t1305
                 {
                     Diff = double.Parse(t1305["diff"].ToString()),
@@ -126,7 +132,7 @@ namespace EbestTradeBot.Core.Services
                 ret.Add(t);
             }
 
-            return ret.OrderByDescending(x => x.Date).ToList();
+            return ret.OrderBy(x => x.Date).ToList();
         }
 
         private void BuyStock(Stock stock, int price)
@@ -185,7 +191,7 @@ namespace EbestTradeBot.Core.Services
                             BoardFunc($"[구매] " +
                                       $"[종목코드:{stock.Shcode}] " +
                                       $"[종목명:{stock.Hname}] " + 
-                                      $"[매수가:{stock.매수가}] " + 
+                                      $"[매수가:{stock.매수가_1차}] " + 
                                       $"[손절가:{stock.손절가}] " + 
                                       $"[익절가:{stock.익절가}]");
                         }
@@ -331,7 +337,7 @@ namespace EbestTradeBot.Core.Services
                 int dwmcode = 1;
                 string date = "";
                 int idx = 0;
-                int cnt = AppSettings.Instance.DayCount;
+                int cnt = AppSettings.Instance.DayCount + 1;
 
                 postData = JsonSerializer.Serialize(new
                 {
@@ -478,7 +484,7 @@ namespace EbestTradeBot.Core.Services
                         Hname = jToken["hname"].ToString(),
                         손절가 = -1,
                         익절가 = -1,
-                        매수가 = -1,
+                        매수가_1차 = -1,
                         보유량 = (int)jToken["janqty"]
                     };
 

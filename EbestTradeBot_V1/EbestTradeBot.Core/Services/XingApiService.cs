@@ -17,6 +17,7 @@ namespace EbestTradeBot.Core.Services
 
         private bool _isLogin = false;
         private static bool IsMarketEnd = true;
+        private bool _currentIsTestTrade;
 
         #region events
         public event EventHandler LoginCompleted;
@@ -62,7 +63,7 @@ namespace EbestTradeBot.Core.Services
 
         public void Login(string id, string pw, string certPw, bool isTestTrade)
         {
-            if (!_xaSession.IsConnected())
+            if (!_xaSession.IsConnected() || _currentIsTestTrade != isTestTrade)
             {
                 Connect(isTestTrade);
             }
@@ -75,6 +76,7 @@ namespace EbestTradeBot.Core.Services
 
         public void Connect(bool isTestTrade)
         {
+            _currentIsTestTrade = isTestTrade;
             if (isTestTrade)
             {
                 _xaSession.ConnectServer("demo.ebestsec.co.kr", 20001);

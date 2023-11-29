@@ -53,7 +53,7 @@ namespace EbestTradeBot_V1.ViewModels
                          $"[종목코드:{Manager.Instance.MyAccount[i].Shcode}] " + 
                          $"[종목명:{Manager.Instance.MyAccount[i].Hname}] " + 
                          $"[보유량:{Manager.Instance.MyAccount[i].보유량}] " + 
-                         $"[매수가:{Manager.Instance.MyAccount[i].매수가}] " + 
+                         $"[매수가:{Manager.Instance.MyAccount[i].매수가_1차}] " + 
                          $"[손절가:{Manager.Instance.MyAccount[i].손절가}] " + 
                          $"[익절가:{Manager.Instance.MyAccount[i].익절가}]");
 
