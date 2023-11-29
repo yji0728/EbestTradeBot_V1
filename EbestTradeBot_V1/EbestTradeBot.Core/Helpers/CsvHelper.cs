@@ -24,12 +24,25 @@ namespace EbestTradeBot.Core.Helpers
 
         public static void WriteCsv(string filePath, TradedStock data)
         {
+            /*
             using (var writer = new StreamWriter(filePath, File.Exists(filePath), Encoding.UTF8))
             using (var csv = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture)))
             {
                 List<TradedStock> stocks = new List<TradedStock>();
                 stocks.Add(data);
                 csv.WriteRecords(stocks);
+            }
+            */
+
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                // Don't write the header again.
+                HasHeaderRecord = false,
+            };
+            using (var writer = new StreamWriter(filePath, File.Exists(filePath), Encoding.UTF8))
+            using (var csv = new CsvWriter(writer, config))
+            {
+                csv.WriteRecord(data);
             }
         }
 
