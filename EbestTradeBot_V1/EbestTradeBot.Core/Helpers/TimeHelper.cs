@@ -26,6 +26,11 @@ namespace EbestTradeBot.Core.Helpers
                 // 15시 10분 이후면 false 리턴
                 return false;
             }
+
+            if (now.Hour == 9 && now.Second > 5)
+            {
+                return false;
+            }
             return true;
         }
     }

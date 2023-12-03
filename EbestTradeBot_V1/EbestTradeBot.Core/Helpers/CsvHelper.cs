@@ -33,7 +33,7 @@ namespace EbestTradeBot.Core.Helpers
                 csv.WriteRecords(stocks);
             }
             */
-
+            FileCheck(filePath);
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 // Don't write the header again.
@@ -43,6 +43,7 @@ namespace EbestTradeBot.Core.Helpers
             using (var csv = new CsvWriter(writer, config))
             {
                 csv.WriteRecord(data);
+                csv.NextRecord();
             }
         }
 
@@ -50,7 +51,12 @@ namespace EbestTradeBot.Core.Helpers
         {
             if (!File.Exists(filePath))
             {
-                using (File.Create(filePath)) ;
+                using (FileStream fs = File.Create(filePath))
+                {
+                    string s = "Shcode,TradeDate\r\n";
+                    byte[] bytes = Encoding.UTF8.GetBytes(s);
+                    fs.Write(bytes);
+                }
             }
         }
     }

@@ -69,7 +69,8 @@ namespace EbestTradeBot.Core.Services
                 for (int i = 0; i < stocks.Count; i++)
                 {
                     // 매수가 지정
-                    if (Manager.Instance.BanStock.Any(x => x.Shcode.Equals(stocks[i].Shcode))) continue;
+                    if (Manager.Instance.BanStock.Any(x => x.Shcode.Equals(stocks[i].Shcode)) || 
+                        Manager.Instance.MyAccount.Any(x => x.Shcode.Equals(stocks[i].Shcode))) continue;
 
                     SetBuyPrice(stocks[i]);
                     await Task.Delay(AppSettings.Instance.ReplySecond * 1000);
@@ -84,10 +85,8 @@ namespace EbestTradeBot.Core.Services
                     if (stocks[i].매수가_1차 >= stockPrice && !Manager.Instance.MyAccount.Any(x => x.Shcode.Equals(stocks[i].Shcode)))
                     {
                         BuyStock(stocks[i], stockPrice);
-
-                        TradedStock stock = new TradedStock { Shcode = stocks[i].Shcode, TradeDate = DateTime.Now };
-                        Manager.Instance.BanStock.Add(stock);
-                        Helpers.CsvHelper.WriteCsv("TradedStock.csv", stock);
+                        
+                        Manager.Instance.BanStock.Add(new TradedStock { Shcode = stocks[i].Shcode, TradeDate = DateTime.Now });
                     }
                 }
             }
@@ -195,6 +194,8 @@ namespace EbestTradeBot.Core.Services
                                       $"[손절가:{stock.손절가}] " + 
                                       $"[익절가:{stock.익절가}]");
                         }
+
+                        Helpers.CsvHelper.WriteCsv("TradedStock.csv", new TradedStock { Shcode = stock.Shcode, TradeDate = DateTime.Now });
                     }
                     else
                     {
@@ -262,6 +263,7 @@ namespace EbestTradeBot.Core.Services
                                       $"[종목코드:{stock.Shcode}] " + 
                                       $"[종목명:{stock.Hname}]");
                         }
+                        Helpers.CsvHelper.WriteCsv("TradedStock.csv", new TradedStock{Shcode = stock.Shcode, TradeDate = DateTime.Now});
                     }
                     else
                     {
