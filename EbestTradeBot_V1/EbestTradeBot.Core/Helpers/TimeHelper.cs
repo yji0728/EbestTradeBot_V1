@@ -27,7 +27,7 @@ namespace EbestTradeBot.Core.Helpers
                 return false;
             }
 
-            if (now.Hour == 9 && now.Second > 5)
+            if (now.Hour == 9 && now.Minute < 5)
             {
                 return false;
             }
