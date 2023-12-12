@@ -19,5 +19,5 @@ CsvHelper, Microsoft.Extensions.Configuration, Newtonsoft.Json, MahApps.Metro
 V1으로 투자대회 진행 예정이며, V2 개발 후 실투자로 전환 예정입니다.
 
 ## Video
-https://github.com/SanHaeKang/EbestTradeBot_V1/assets/100114727/c28d0c53-e6f6-4d80-ac0a-39550df274a0
+https://github.com/SanHaeKang/EbestTradeBot_V1/assets/100114727/de4dea87-26a2-4b53-a7f2-4ea852a63839
 
