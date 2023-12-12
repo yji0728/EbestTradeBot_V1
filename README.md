@@ -7,11 +7,11 @@
 ## Stack
 ### Program
 Windows Desktop (WPF)
-### Language
+#### Language
 C#
-### Framework
+#### Framework
 .NET8, Prism
-### Library
+#### Library
 CsvHelper, Microsoft.Extensions.Configuration, Newtonsoft.Json, MahApps.Metro
 ## Project Status
 
