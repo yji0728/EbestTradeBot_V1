@@ -42,8 +42,8 @@ namespace EbestTradeBot.Core.Helpers
             using (var writer = new StreamWriter(filePath, File.Exists(filePath), Encoding.UTF8))
             using (var csv = new CsvWriter(writer, config))
             {
-                csv.WriteRecord(data);
                 csv.NextRecord();
+                csv.WriteRecord(data);
             }
         }
 

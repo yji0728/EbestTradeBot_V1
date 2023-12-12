@@ -61,7 +61,7 @@ namespace EbestTradeBot_V1.ViewModels
             }
 
             // 구매 모듈 실행
-            _xingApiService.StartFindStockToBuyAsync(CancellationTokenSource);
+            _xingApiService.StartFindStockToFirstBuyAsync(CancellationTokenSource);
 
             // 판매 모듈 실행
             _openApiService.StartAccountToSellAsync(CancellationTokenSource);

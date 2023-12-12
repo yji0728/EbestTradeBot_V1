@@ -82,7 +82,11 @@ namespace EbestTradeBot.Core.Services
                               $"[매수가:{stocks[i].매수가_1차}] " +
                               $"[손절가:{stocks[i].손절가}] " +
                               $"[익절가:{stocks[i].익절가}]");
-                    if (stocks[i].매수가_1차 >= stockPrice && !Manager.Instance.MyAccount.Any(x => x.Shcode.Equals(stocks[i].Shcode)))
+                    if (
+                        stocks[i].매수가_1차 >= stockPrice && 
+                        Manager.Instance.MyAccount.Count < 3 &&
+                        !Manager.Instance.MyAccount.Any(x => x.Shcode.Equals(stocks[i].Shcode))
+                        )
                     {
                         BuyStock(stocks[i], stockPrice);
                         
@@ -568,5 +572,10 @@ namespace EbestTradeBot.Core.Services
             }
         }
         #endregion
+
+        public void StartAccountV2ToSellAsync(CancellationTokenSource cancellationTokenSource)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

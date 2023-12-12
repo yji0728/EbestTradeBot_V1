@@ -164,11 +164,10 @@ namespace EbestTradeBot.Core.Services
         }
         #endregion
 
-        public async Task StartFindStockToBuyAsync(CancellationTokenSource cancellationTokenSource)
+        public async Task StartFindStockToFirstBuyAsync(CancellationTokenSource cancellationTokenSource)
         {
             while (!cancellationTokenSource.IsCancellationRequested)
             {
-                
                 try
                 {
                     if (!TimeHelper.IsMarketOpen())
@@ -211,6 +210,11 @@ namespace EbestTradeBot.Core.Services
                     await Task.Delay(4000);
                 }
             }
+        }
+
+        public void StartFindStockV2ToBuyAsync(CancellationTokenSource cancellationTokenSource)
+        {
+            throw new NotImplementedException();
         }
     }
 }

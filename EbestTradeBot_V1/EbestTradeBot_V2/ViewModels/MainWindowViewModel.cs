@@ -56,11 +56,11 @@ namespace EbestTradeBot_V2.ViewModels
                 await Task.Delay(AppSettings.Instance.ReplySecond * 1000);
             }
 
-            // 구매 모듈 실행
-            _xingApiService.StartFindStockToBuyAsync(CancellationTokenSource);
+            // 1차 구매 모듈 실행
+            _xingApiService.StartFindStockToFirstBuyAsync(CancellationTokenSource);
 
             // 판매 모듈 실행
-            _openApiService.StartAccountToSellAsync(CancellationTokenSource);
+            _openApiService.StartAccountV2ToSellAsync(CancellationTokenSource);
 
             Started?.Invoke(this, null);
         }
