@@ -13,6 +13,8 @@ C#
 .NET8, Prism
 #### Library
 CsvHelper, Microsoft.Extensions.Configuration, Newtonsoft.Json, MahApps.Metro
+#### API
+이베스트 투자증권 OpenAPI(RestAPI), XingAPI(COM)
 
 ## Project Status
 이 프로젝트는 베타테스트를 진행 중이며, 모의투자 계좌로 현재 테스트 진행중입니다.
