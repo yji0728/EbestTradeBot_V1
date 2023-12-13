@@ -12,7 +12,7 @@
         d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
         prism:ViewModelLocator.AutoWireViewModel="True"
         ResizeMode="NoResize"
-        Title="EbestTradeBot" Height="450" Width="800">
+        Title="EbestTradeBot" Height="450" Width="900">
 
     <mah:MetroWindow.Resources>
         <Style x:Key="ButtonBackgroundByRun" TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button}">
