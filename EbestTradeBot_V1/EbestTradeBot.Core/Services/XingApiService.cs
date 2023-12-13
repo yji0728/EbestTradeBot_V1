@@ -211,10 +211,5 @@ namespace EbestTradeBot.Core.Services
                 }
             }
         }
-
-        public void StartFindStockV2ToBuyAsync(CancellationTokenSource cancellationTokenSource)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -11,27 +11,17 @@ namespace EbestTradeBot.Core.Helpers
         public static bool IsMarketOpen()
         {
             DateTime now = DateTime.Now;
+            TimeSpan currentTime = now.TimeOfDay;
+            TimeSpan startTime = new TimeSpan(9, 0, 0);
+            TimeSpan endTime = new TimeSpan(15, 31, 0);
+
             if (now.DayOfWeek == DayOfWeek.Saturday || now.DayOfWeek == DayOfWeek.Sunday)
             {
                 // 주말이면 false 리턴
                 return false;
             }
-            if (now.Hour < 9 || now.Hour > 15)
-            {
-                // 9시부터 15시 사이가 아니면 false 리턴
-                return false;
-            }
-            if (now.Hour == 15 && now.Minute > 10)
-            {
-                // 15시 10분 이후면 false 리턴
-                return false;
-            }
 
-            if (now.Hour == 9 && now.Minute < 5)
-            {
-                return false;
-            }
-            return true;
+            return currentTime >= startTime && currentTime < endTime;
         }
     }
 }

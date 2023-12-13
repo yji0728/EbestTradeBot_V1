@@ -35,6 +35,7 @@ namespace EbestTradeBot.Core
         public Theme Theme { get; set; }
         public int ReplySecond { get; set; }
         public int CooldownDay { get; set; }
+        public bool IsSecondTrade { get; set; }
 
         public AppSettings()
         {
@@ -80,6 +81,7 @@ namespace EbestTradeBot.Core
             IsTestTrade = appSettings.IsTestTrade;
             ReplySecond = appSettings.ReplySecond;
             CooldownDay = appSettings.CooldownDay;
+            IsSecondTrade = appSettings.IsSecondTrade;
 
             SaveToJson(this);
         }
@@ -120,6 +122,7 @@ namespace EbestTradeBot.Core
             IsTestTrade = true;
             ReplySecond = 0;
             CooldownDay = 0;
+            IsSecondTrade = false;
         }
 
         private void GetAppSettingForConfig(IConfiguration configuration)
@@ -175,6 +178,10 @@ namespace EbestTradeBot.Core
             int cooldownDay;
             if (int.TryParse(configuration["CooldownDay"], out cooldownDay)) CooldownDay = cooldownDay;
             else CooldownDay = 0;
+
+            bool isSecondTrade;
+            if (bool.TryParse(configuration["IsSecondTrade"], out isSecondTrade)) IsSecondTrade = isSecondTrade;
+            else IsSecondTrade = false;
         }
 
         private void SaveToJson(AppSettings appSettings)

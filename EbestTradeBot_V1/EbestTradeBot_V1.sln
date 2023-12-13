@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EbestTradeBot.Core", "Ebest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{9BACB949-3E62-440B-8208-4307C2518F81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EbestTradeBot_V2", "EbestTradeBot_V2\EbestTradeBot_V2.csproj", "{66C6F276-B025-43E3-98FF-8575952A7EF1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,14 +41,6 @@ Global
 		{9BACB949-3E62-440B-8208-4307C2518F81}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9BACB949-3E62-440B-8208-4307C2518F81}.Release|x86.ActiveCfg = Release|x86
 		{9BACB949-3E62-440B-8208-4307C2518F81}.Release|x86.Build.0 = Release|x86
-		{66C6F276-B025-43E3-98FF-8575952A7EF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{66C6F276-B025-43E3-98FF-8575952A7EF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{66C6F276-B025-43E3-98FF-8575952A7EF1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{66C6F276-B025-43E3-98FF-8575952A7EF1}.Debug|x86.Build.0 = Debug|Any CPU
-		{66C6F276-B025-43E3-98FF-8575952A7EF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{66C6F276-B025-43E3-98FF-8575952A7EF1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{66C6F276-B025-43E3-98FF-8575952A7EF1}.Release|x86.ActiveCfg = Release|Any CPU
-		{66C6F276-B025-43E3-98FF-8575952A7EF1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

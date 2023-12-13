@@ -53,7 +53,8 @@ namespace EbestTradeBot_V1.ViewModels
                          $"[종목코드:{Manager.Instance.MyAccount[i].Shcode}] " + 
                          $"[종목명:{Manager.Instance.MyAccount[i].Hname}] " + 
                          $"[보유량:{Manager.Instance.MyAccount[i].보유량}] " + 
-                         $"[매수가:{Manager.Instance.MyAccount[i].매수가_1차}] " + 
+                         $"[1차 매수가:{Manager.Instance.MyAccount[i].매수가_1차}] " + 
+                         $"[2차 매수가:{Manager.Instance.MyAccount[i].매수가_2차}] " + 
                          $"[손절가:{Manager.Instance.MyAccount[i].손절가}] " + 
                          $"[익절가:{Manager.Instance.MyAccount[i].익절가}]");
 
@@ -65,6 +66,10 @@ namespace EbestTradeBot_V1.ViewModels
 
             // 판매 모듈 실행
             _openApiService.StartAccountToSellAsync(CancellationTokenSource);
+
+            // 2차 매수 모듈 실행
+            if(AppSettings.Instance.IsSecondTrade)
+                _openApiService.StartAccountToSecondBuyAsync(CancellationTokenSource);
 
             Started?.Invoke(this, null);
         }

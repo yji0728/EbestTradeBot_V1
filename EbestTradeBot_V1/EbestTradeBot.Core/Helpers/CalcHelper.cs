@@ -18,6 +18,7 @@ namespace EbestTradeBot.Core.Helpers
             stock.익절가 = -1;
             stock.손절가 = -1;
             stock.매수가_1차 = -1;
+            stock.매수가_2차 = -1;
 
             for (int i = 0; i < t1305s.Count; i++)
             {
@@ -44,9 +45,11 @@ namespace EbestTradeBot.Core.Helpers
                 break;
             }
             stock.매수가_1차 = (stock.손절가 + stock.익절가) / 2;
-            if (stock.매수가_1차 == -1 || stock.익절가 == -1 || stock.손절가 == -1)
+            stock.매수가_2차 = (stock.매수가_1차 + stock.손절가) / 2;
+            if (stock.매수가_1차 == -1 || stock.익절가 == -1 || stock.손절가 == -1 || stock.매수가_2차 == -1)
             {
                 stock.매수가_1차 = -1;
+                stock.매수가_2차 = -1;
                 stock.익절가 = -1;
                 stock.손절가 = -1;
 

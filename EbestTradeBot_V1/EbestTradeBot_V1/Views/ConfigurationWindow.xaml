@@ -88,6 +88,8 @@
             </StackPanel>
         </GroupBox>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="2.5">
+            <CheckBox Content="2차매수" Margin="2.5" VerticalAlignment="Center"
+                      IsChecked="{Binding IsSecondTrade}"/>
             <CheckBox Content="모의투자" Margin="2.5" VerticalAlignment="Center"
                       IsChecked="{Binding IsTestTrade}"/>
             <Button x:Name="OkButton" Content="확인" VerticalAlignment="Center" Margin="2.5"

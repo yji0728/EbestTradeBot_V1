@@ -119,6 +119,14 @@ namespace EbestTradeBot_V1.ViewModels
             get => _cooldownDay;
             set => SetProperty(ref _cooldownDay, value);
         }
+
+        private bool _isSecondTrade;
+
+        public bool IsSecondTrade
+        {
+            get => _isSecondTrade;
+            set => SetProperty(ref _isSecondTrade, value);
+        }
         #endregion
 
         #region Constructor
@@ -137,6 +145,7 @@ namespace EbestTradeBot_V1.ViewModels
             DayCount = appSettings.DayCount;
             ReplySecond = appSettings.ReplySecond;
             CooldownDay = appSettings.CooldownDay;
+            IsSecondTrade = appSettings.IsSecondTrade;
         }
         private ConfigurationViewModel()
         {
@@ -204,6 +213,7 @@ namespace EbestTradeBot_V1.ViewModels
             appSettings.DayCount = DayCount;
             appSettings.ReplySecond = ReplySecond;
             appSettings.CooldownDay = CooldownDay;
+            appSettings.IsSecondTrade = IsSecondTrade;
 
             AppSettings.Instance.Set(appSettings);
         }

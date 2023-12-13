@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -74,12 +75,13 @@ namespace EbestTradeBot.Core.Services
 
                     SetBuyPrice(stocks[i]);
                     await Task.Delay(AppSettings.Instance.ReplySecond * 1000);
-                    if (stocks[i].매수가_1차 == -1 || stocks[i].손절가 == -1 || stocks[i].익절가 == -1) continue;
+                    if (stocks[i].매수가_1차 == -1 || stocks[i].손절가 == -1 || stocks[i].익절가 == -1 || stocks[i].매수가_2차 == -1) continue;
                     int stockPrice = GetCurrentQuote(stocks[i].Shcode).Price;
                     BoardFunc($"[검색] " +
                               $"[종목코드:{stocks[i].Shcode}] " +
                               $"[종목명:{stocks[i].Hname}] " +
-                              $"[매수가:{stocks[i].매수가_1차}] " +
+                              $"[1차 매수가:{stocks[i].매수가_1차}] " +
+                              $"[2차 매수가:{stocks[i].매수가_2차}] " +
                               $"[손절가:{stocks[i].손절가}] " +
                               $"[익절가:{stocks[i].익절가}]");
                     if (
@@ -89,8 +91,6 @@ namespace EbestTradeBot.Core.Services
                         )
                     {
                         BuyStock(stocks[i], stockPrice);
-                        
-                        Manager.Instance.BanStock.Add(new TradedStock { Shcode = stocks[i].Shcode, TradeDate = DateTime.Now });
                     }
                 }
             }
@@ -186,20 +186,27 @@ namespace EbestTradeBot.Core.Services
 
                     if (jObj["rsp_cd"].ToString().Equals("00040"))
                     {
-                        stock.보유량 = OrdQty;
-                        Manager.Instance.MyAccount.Add(stock);
+                        var existingStock = Manager.Instance.MyAccount.FirstOrDefault(x => x.Shcode.Equals(stock.Shcode));
+
+                        if (existingStock != null)
+                        {
+                            existingStock.보유량 += OrdQty;
+                        }
+                        else
+                        {
+                            Manager.Instance.MyAccount.Add(stock);
+                        }
 
                         if (BoardFunc != null)
                         {
                             BoardFunc($"[구매] " +
                                       $"[종목코드:{stock.Shcode}] " +
                                       $"[종목명:{stock.Hname}] " + 
-                                      $"[매수가:{stock.매수가_1차}] " + 
+                                      $"[1차 매수가:{stock.매수가_1차}] " + 
+                                      $"[2차 매수가:{stock.매수가_2차}] " + 
                                       $"[손절가:{stock.손절가}] " + 
                                       $"[익절가:{stock.익절가}]");
                         }
-
-                        Helpers.CsvHelper.WriteCsv("TradedStock.csv", new TradedStock { Shcode = stock.Shcode, TradeDate = DateTime.Now });
                     }
                     else
                     {
@@ -491,6 +498,7 @@ namespace EbestTradeBot.Core.Services
                         손절가 = -1,
                         익절가 = -1,
                         매수가_1차 = -1,
+                        매수가_2차 = -1,
                         보유량 = (int)jToken["janqty"]
                     };
 
@@ -520,21 +528,24 @@ namespace EbestTradeBot.Core.Services
                         stocks.AddRange(Manager.Instance.MyAccount);
 
                         // 장끝나는 시간에 전부매도
+                        
                         if (!TimeHelper.IsMarketOpen())
                         {
                             if (!IsMarketEnd)
                             {
+                                /*
                                 foreach (var stock in stocks)
                                 {
                                     SellStock(stock);
                                 }
-
+                                */
                                 BoardFunc($"[장이 마감되어 판매 모듈을 종료합니다]");
                             }
 
                             IsMarketEnd = true;
                             continue;
                         }
+                        
 
                         // 계산후 매도
                         foreach (var stock in stocks)
@@ -547,6 +558,7 @@ namespace EbestTradeBot.Core.Services
                             if (price > stock.익절가 || price < stock.손절가 || price == up || price == down)
                             {
                                 SellStock(stock);
+                                Manager.Instance.BanStock.Add(new TradedStock { Shcode = stock.Shcode, TradeDate = DateTime.Now });
                             }
                             await Task.Delay(AppSettings.Instance.ReplySecond * 500);
                         }
@@ -573,9 +585,33 @@ namespace EbestTradeBot.Core.Services
         }
         #endregion
 
-        public void StartAccountV2ToSellAsync(CancellationTokenSource cancellationTokenSource)
+        public async Task StartAccountToSecondBuyAsync(CancellationTokenSource cancellationTokenSource)
         {
-            throw new NotImplementedException();
+            while (!cancellationTokenSource.IsCancellationRequested)
+            {
+                try
+                {
+                    var stocks = Manager.Instance.MyAccount;
+                    var buyPrice = AppSettings.Instance.TradePrice;
+
+                    foreach (var stock in stocks)
+                    {
+                        if ((buyPrice * 1.1) - (stock.매수가_1차 * stock.보유량) < 0) continue;
+
+                        var price = GetCurrentQuote(stock.Shcode).Price;
+                        if (price <= stock.매수가_2차) BuyStock(stock, price);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                    throw;
+                }
+                finally
+                {
+                    await Task.Delay(AppSettings.Instance.ReplySecond * 1000);
+                }
+            }
         }
     }
 }
