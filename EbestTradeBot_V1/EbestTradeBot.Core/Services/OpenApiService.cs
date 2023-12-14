@@ -76,7 +76,7 @@ namespace EbestTradeBot.Core.Services
                     SetBuyPrice(stocks[i]);
                     await Task.Delay(AppSettings.Instance.ReplySecond * 1000);
                     if (stocks[i].매수가_1차 == -1 || stocks[i].손절가 == -1 || stocks[i].익절가 == -1 || stocks[i].매수가_2차 == -1) continue;
-                    int stockPrice = GetCurrentQuote(stocks[i].Shcode).Price;
+                    int stockPrice = (await GetCurrentQuote(stocks[i].Shcode)).Price;
                     BoardFunc($"[검색] " +
                               $"[종목코드:{stocks[i].Shcode}] " +
                               $"[종목명:{stocks[i].Hname}] " +
@@ -288,42 +288,55 @@ namespace EbestTradeBot.Core.Services
             }
         }
 
-        private (int Price, int Uplmtprice, int Dnlmtprice) GetCurrentQuote(string shcode) // 
+        private async Task<(int Price, int Uplmtprice, int Dnlmtprice)> GetCurrentQuote(string shcode) // 
         {
-            lock (t1101Key)
+            JObject jObj = null;
+            try
             {
-                string url = $"{_domain}{_marketdataPath}";
-                string postData;
-                Dictionary<string, string> headers = new();
-
-                JObject jObj = null;
-
-                headers["content-type"] = "application/json; charset=utf-8";
-                headers["authorization"] = $"{Token}";
-                headers["tr_cd"] = "t1101";
-                headers["tr_cont"] = "X";
-                headers["tr_cont_key"] = "";
-                headers["mac_address"] = "";
-
-                postData = JsonSerializer.Serialize(new
+                lock (t1101Key)
                 {
-                    t1101InBlock = new
+                    string url = $"{_domain}{_marketdataPath}";
+                    string postData;
+                    Dictionary<string, string> headers = new();
+
+                    
+
+                    headers["content-type"] = "application/json; charset=utf-8";
+                    headers["authorization"] = $"{Token}";
+                    headers["tr_cd"] = "t1101";
+                    headers["tr_cont"] = "X";
+                    headers["tr_cont_key"] = "";
+                    headers["mac_address"] = "";
+
+                    postData = JsonSerializer.Serialize(new
                     {
-                        shcode
+                        t1101InBlock = new
+                        {
+                            shcode
+                        }
+                    });
+
+                    try
+                    {
+                        jObj = HttpService.PostForJson(url, postData, headers);
+
+                        return ((int)jObj["t1101OutBlock"]["price"], (int)jObj["t1101OutBlock"]["uplmtprice"], (int)jObj["t1101OutBlock"]["dnlmtprice"]);
                     }
-                });
-
-                try
-                {
-                    jObj = HttpService.PostForJson(url, postData, headers);
-
-                    return ((int)jObj["t1101OutBlock"]["price"], (int)jObj["t1101OutBlock"]["uplmtprice"], (int)jObj["t1101OutBlock"]["dnlmtprice"]);
-                }
-                catch (Exception e)
-                {
-                    throw new Exception($"[GetCurrentQuote] [{e.StackTrace}] [{e.Message}] [{jObj?.ToString()}]");
+                    catch (Exception e)
+                    {
+                        throw new Exception($"[GetCurrentQuote] [{e.StackTrace}] [{e.Message}] [{jObj?.ToString()}]");
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                throw new Exception($"[SetBuyPrice] [{e.StackTrace}] [{e.Message}] [{jObj?.ToString()}]");
+            }
+            finally
+            {
+                await Task.Delay(1000);
+            }
+            
         }
         #endregion
 
@@ -550,7 +563,7 @@ namespace EbestTradeBot.Core.Services
                         // 계산후 매도
                         foreach (var stock in stocks)
                         {
-                            var stockPrice = GetCurrentQuote(stock.Shcode);
+                            var stockPrice = (await GetCurrentQuote(stock.Shcode));
                             int price = stockPrice.Price;
                             int up = stockPrice.Uplmtprice;
                             int down = stockPrice.Dnlmtprice;
@@ -598,7 +611,7 @@ namespace EbestTradeBot.Core.Services
                     {
                         if ((buyPrice * 1.1) - (stock.매수가_1차 * stock.보유량) < 0) continue;
 
-                        var price = GetCurrentQuote(stock.Shcode).Price;
+                        var price = (await GetCurrentQuote(stock.Shcode)).Price;
                         if (price <= stock.매수가_2차) BuyStock(stock, price);
                     }
                 }

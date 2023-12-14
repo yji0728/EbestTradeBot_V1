@@ -93,7 +93,7 @@ namespace EbestTradeBot.Core.Services
 
         private void Request_t1857()
         {
-            if (!_xaSession.IsConnected())
+            if (!_xaSession.IsConnected() || !_isLogin)
                 Login(AppSettings.Instance.Id, AppSettings.Instance.Password, AppSettings.Instance.CertificationPassword, AppSettings.Instance.IsTestTrade);
 
             if (_isLogin)
