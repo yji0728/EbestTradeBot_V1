@@ -12,7 +12,7 @@ namespace EbestTradeBot.Core.Helpers
         {
             DateTime now = DateTime.Now;
             TimeSpan currentTime = now.TimeOfDay;
-            TimeSpan startTime = new TimeSpan(9, 0, 0);
+            TimeSpan startTime = new TimeSpan(9, 1, 0);
             TimeSpan endTime = new TimeSpan(15, 31, 0);
 
             if (now.DayOfWeek == DayOfWeek.Saturday || now.DayOfWeek == DayOfWeek.Sunday)
